@@ -6,18 +6,72 @@
 	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
 	<style>
     	* { 
-    		padding: 0; margin: 0;
-    		font-family:"Montserrat"; 
+    		padding: 0; margin:0;
+    		text-align: center;
+    		font-family:"Montserrat";
     	}
     </style>
 </head>
-
 <body>
 	<script>
+		let canvas;
+		let context;
+		let parallelogramExists = false;
+		let coords = new Array();
+		window.onload = function() {
+			canvas = document.querySelector("canvas");
+			context = canvas.getContext("2d");
+			canvas.onclick = draw_circles;
+			}
+		function draw_circles(e) {
+			if (parallelogramExists) {
+				return;
+			}
+
+			var x = e.pageX - (document.documentElement.clientWidth - canvas.width)/2;
+			var y = e.pageY - canvas.offsetTop;
+
+			coords.push([x,y]);
+			
+
+  			context.strokeStyle = '#ff2626';
+
+			context.beginPath();
+			context.arc(x, y, 5.5, 0, Math.PI * 2, true);
+			context.stroke();
+			context.closePath();
+
+			if (coords.length == 3) {
+				parallelogramExists = true;
+				drawParal();
+			}
+		}
+		function drawParal(e) {
+			x_fourth_root = coords[2][0] - coords[1][0] + coords[0][0];
+			y_fourth_root = coords[2][1] - coords[1][1] + coords[0][1];
+
+			context.strokeStyle = 'green';
+			context.lineWidth = 3;
+
+			context.beginPath();
+			context.moveTo(coords[0][0], coords[0][1]);
+			context.lineTo(coords[1][0], coords[1][1]);
+			context.lineTo(coords[2][0], coords[2][1]);
+			context.lineTo(x_fourth_root, y_fourth_root);
+			context.lineTo(coords[0][0], coords[0][1]);
+			context.stroke();
+		}
+		function clearCanvas() {
+			context.clearRect(0, 0, canvas.width, canvas.height);
+			parallelogramExists = false;
+			coords = [];
+		}
 	</script>
-	<button id="but" style="margin: 5px;">
+	<canvas id="canvas" width="1000" height="500" style="margin: auto; border:1px solid black; margin-top: 5vh"></canvas>
+	<div>
+	<button id="buttton" onclick="clearCanvas()" style="margin-top: 10px;">
 		<font size="5px">clear</font>
 	</button>
+	</div>
 </body>
-
 </html>
