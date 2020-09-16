@@ -163,12 +163,30 @@
 				coords = [];
 			}
 		}
+		function about() {
+			let instruction= "Welcome!\n" +
+							 "This program builds different figures.\n" +
+							 "Just click on canvas and you will see red circles with coords.\n" +
+							 "It`s enough to define 3 points to build blue parallelogram and yellow circle.\n" +
+							 "These new figures have general center of mass and the same square.\n" +
+							 "Value of square you will see in the center of figures.\n"+
+							 "Then you can move roots of parallelogram.\n" + 
+							 "Notice: 2nd and 3rd roots move at the same way.\n " +
+							 "But anyway you can build any parallelogram you want.\n"
+			let author = "Author: Oleksii Pavliuk\n" +
+						 "Contact: https://t.me/c0ffin_dancer";	 
+			alert(instruction);
+			alert(author);
+		}
 	</script>
 	<canvas id="canvas" width="1000" height="500" style="margin: auto; border:1px solid black; margin-top: 5vh"></canvas>
 	<div>
-	<button id="buttton" onclick="clearCanvas()" style="margin-top: 10px;">
+	<button onclick="clearCanvas()" style="margin-top: 10px; width: 20px; width: 120px; height: 35px;">
 		<font size="5px">clear</font>
 	</button>
 	</div>
+	<button onclick="about()" style="margin-top: 10px; width: 20px; width: 120px; height: 35px;">
+		<font size="5px">about</font>
+	</button>
 </body>
 </html>
