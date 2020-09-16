@@ -22,6 +22,7 @@
 		window.onload = function() {
 			canvas = document.querySelector("canvas");
 			context = canvas.getContext("2d");
+			context.font = "18px";
 			canvas.onclick = start;
 			canvas.onmousedown = move;
 			canvas.onmouseup = function() { canvas.onmousemove = null;};
@@ -93,6 +94,7 @@
 			context.beginPath();
 			context.arc(x_circle, y_circle, radius, 0, Math.PI * 2, true);
 			context.stroke();
+			context.fillText("S=" + Math.round(square), x_circle-11, y_circle+15);
 			context.closePath();
 		}
 		function move(e) {
@@ -111,11 +113,23 @@
 			let y = e.pageY - canvas.offsetTop;
 			let dx = x - coords[moving_root_id][0];
 			let dy = y - coords[moving_root_id][1];
+			// cleaning canvas before rendering
 			clearCanvas();
-			for (let i = 0; i < coords.length - 1; i++) {
-				coords[i][0] += dx;
-				coords[i][1] += dy;
-				draw_red_circle(coords[i][0], coords[i][1]);
+			// logic of moving parallelogram
+			if (moving_root_id == 0) {
+				coords[0][0] += dx;
+				coords[1][0] += dx;
+				coords[0][1] += dy;
+				coords[1][1] += dy;
+				draw_all_circles_from_coords();
+			}
+			// 2 and 3 roots allways move together 
+			if (moving_root_id == 1 || moving_root_id == 2) {
+				coords[1][0] += dx;
+				coords[2][0] += dx;
+				coords[1][1] += dy;
+				coords[2][1] += dy;
+				draw_all_circles_from_coords();
 			}
 			draw_parallelogram();
 		}
@@ -125,7 +139,14 @@
 			context.beginPath();
 			context.arc(x, y, 5.5, 0, Math.PI * 2, true);
 			context.stroke();
+			context.fillText("x=" + Math.round(x), x-11, y+15);
+			context.fillText("y=" + Math.round(y), x-11, y+25);
 			context.closePath();
+		}
+		function draw_all_circles_from_coords() {
+			draw_red_circle(coords[0][0], coords[0][1]);
+			draw_red_circle(coords[1][0], coords[1][1]);
+			draw_red_circle(coords[2][0], coords[2][1]);
 		}
 		function check_pressing_on_circles(x,y) {
 			for (let i = 0; i < coords.length - 1; i++) {
