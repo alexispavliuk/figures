@@ -23,6 +23,8 @@
 			context = canvas.getContext("2d");
 			canvas.onclick = draw_circles;
 			}
+		// allows user to draw circles at canvas
+		// while there is no 3 circles drawed by user we allow him to do that
 		function draw_circles(e) {
 			if (parallelogramExists) {
 				return;
@@ -30,9 +32,7 @@
 
 			var x = e.pageX - (document.documentElement.clientWidth - canvas.width)/2;
 			var y = e.pageY - canvas.offsetTop;
-
 			coords.push([x,y]);
-			
 
   			context.strokeStyle = '#ff2626';
 
@@ -41,16 +41,19 @@
 			context.stroke();
 			context.closePath();
 
+			// if user drawed 3 circles - we should draw parallelogram
 			if (coords.length == 3) {
 				parallelogramExists = true;
 				drawParal();
 			}
 		}
-		function drawParal(e) {
+		// draw parallelogram by 3 roots
+		function drawParal() {
 			x_fourth_root = coords[2][0] - coords[1][0] + coords[0][0];
 			y_fourth_root = coords[2][1] - coords[1][1] + coords[0][1];
+			coords.push([x_fourth_root, y_fourth_root]);
 
-			context.strokeStyle = 'green';
+			context.strokeStyle = '#7775f8';
 			context.lineWidth = 3;
 
 			context.beginPath();
@@ -60,6 +63,36 @@
 			context.lineTo(x_fourth_root, y_fourth_root);
 			context.lineTo(coords[0][0], coords[0][1]);
 			context.stroke();
+
+			// calculate square of parallelogram
+			// We will use Heron's formula and calculate half of parallelogram`s square and then double it
+			// first of all lets find lenght of 3 sides
+			let a = Math.sqrt( Math.pow(coords[0][0] - coords[1][0], 2) + Math.pow(coords[0][1] - coords[1][1], 2) );
+			let b = Math.sqrt( Math.pow(coords[1][0] - coords[2][0], 2) + Math.pow(coords[1][1] - coords[2][1], 2) );
+			let c = Math.sqrt( Math.pow(coords[2][0] - coords[0][0], 2) + Math.pow(coords[2][1] - coords[0][1], 2) );
+			// now calculate semi-perimeter
+			let p = (a+b+c)/2;
+			// find square
+			let square = 2 * Math.sqrt( p*(p-a)*(p-b)*(p-c) );
+			// call func to draw yellow circle
+			drawYellowCircle(square);
+		}
+	    // draw yellow circle in the centre of paralellogram
+		function drawYellowCircle(square) {
+			// calculate coords of circle
+			// it`s enough to find the middle of one of the diagonals
+			x_circle = (coords[0][0] + coords[2][0])/2;
+			y_circle = (coords[0][1] + coords[2][1])/2;
+			// calculate radius 
+			let radius = Math.sqrt( square / Math.PI );
+
+			context.strokeStyle = 'yellow';
+			context.lineWidth = 3;
+
+			context.beginPath();
+			context.arc(x_circle, y_circle, radius, 0, Math.PI * 2, true);
+			context.stroke();
+			context.closePath();
 		}
 		function clearCanvas() {
 			context.clearRect(0, 0, canvas.width, canvas.height);
