@@ -1,0 +1,27 @@
+* { 
+    padding: 0; margin:0;
+    text-align: center;
+    font-family:"Montserrat";
+}
+
+canvas { 
+    margin: auto; 
+    border:1px solid black; 
+    margin-top: 5vh
+}
+
+button.clear {
+   margin-top: 10px; 
+   width: 20px; 
+   width: 120px; 
+   height: 35px;
+   font-size: 20px;;
+}
+
+button.about {
+    margin-top: 10px; 
+    width: 20px; 
+    width: 120px; 
+    height: 35px;
+    font-size: 20px;
+}
